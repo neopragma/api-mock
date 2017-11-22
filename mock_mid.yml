@@ -1,2 +1,0 @@
-GET|/oreo/filling/chocolate: !com.neopragma.apimock.RequestResponseData
-   requestURIPath: /oreo/filling/chocolate

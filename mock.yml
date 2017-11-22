@@ -1,2 +1,0 @@
-GET|/: !com.neopragma.apimock.RequestResponseData
-   responseCode: 301
