@@ -1,0 +1,3 @@
+GET|/reverse/text+to+reverse: !com.neopragma.apimock.RequestResponseData
+   requestURIPath: /reverse/text+to+reverse
+   responseBody: esrever ot txet

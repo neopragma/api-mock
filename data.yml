@@ -1,0 +1,7 @@
+!com.neopragma.apimock.RequestResponseData
+requestHeaders: 
+- 'Content-Type: application/json'
+- 'Accept-Charset: utf-8'
+requestMethod: POST
+requestURIPath: /check
+responseCode: 403

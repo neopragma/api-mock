@@ -1,0 +1,1 @@
+mvn clean test -Dcucumber.options="--plugin html:target/functional-test-results --glue classpath:com.neopragma.cucumbersandbox src/test/resources"
