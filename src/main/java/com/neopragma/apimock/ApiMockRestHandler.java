@@ -1,18 +1,22 @@
 package com.neopragma.apimock;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 @SuppressWarnings("restriction")
 public class ApiMockRestHandler implements HttpHandler {
-	
-	private static final String MOCK_DATA_FILENAME = "test.yml";
+	Map<String, RequestResponseData> mockData;
+
+	public ApiMockRestHandler(Map<String, RequestResponseData> mockData) {
+		if (mockData == null) {
+			throw new IllegalArgumentException("ApiRestHandler requires a non-null Map<String, RequestResponseData> argument");
+		}
+		this.mockData = mockData;
+	}
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
@@ -27,11 +31,8 @@ public class ApiMockRestHandler implements HttpHandler {
         os.close();	
     }
 	
-	@SuppressWarnings("unchecked")
-	private RequestResponseData getMockData(String requestMethod, String requestURIPath) throws IOException {
-		YamlReader yamlReader = new YamlReader(new FileReader(MOCK_DATA_FILENAME));
-		Map<String, RequestResponseData> config = (Map<String, RequestResponseData>) yamlReader.read();
-		return config.get(requestMethod + "|" + requestURIPath);
+	private RequestResponseData getMockData(String requestMethod, String requestURIPath) {
+		return mockData.get(requestMethod + "|" + requestURIPath);
 	}
 
 }

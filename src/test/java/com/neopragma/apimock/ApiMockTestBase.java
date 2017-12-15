@@ -1,7 +1,6 @@
 package com.neopragma.apimock;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -10,44 +9,35 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import com.esotericsoftware.yamlbeans.YamlWriter;
+
 import com.sun.net.httpserver.HttpServer;
 
 @SuppressWarnings("restriction")
 public abstract class ApiMockTestBase {	
-	protected RequestResponseData data;
 	protected static final String EMPTY_STRING = "";
 	private static HttpServer server;
 	private HttpURLConnection conn;
 	private static final String BASE_URL = "http://localhost:8000";
 	private static final String SLASH = "/";
-	private static final String MOCK_DATA_FILENAME = "test.yml";
+	private Map<String, RequestResponseData> mockData;
 	
-	@BeforeClass
-	public static void startServer() throws IOException {
+	protected void startServerWithMockedResponse(
+			String requestMethod, 
+			String requestURIPath,
+			String responseBody,
+			String responseCode) throws IOException {
+		mockData = new HashMap<String, RequestResponseData>();
+		mockData.put(requestMethod + "|" + requestURIPath, 
+				buildMockData(requestMethod, requestURIPath, responseBody, responseCode));
 		server = HttpServer.create(new InetSocketAddress(8000), 0);
-		   server.createContext("/", new ApiMockRestHandler());
+		   server.createContext("/", new ApiMockRestHandler(mockData));
 		   server.setExecutor(null); 
 		   server.start();		
 	}
 	
-	@AfterClass
-	public static void stopServer() throws IOException {
-		server.stop(1);
-	}
-	
-	@Before
-	public void beforeEach() {
-		data = new RequestResponseData();
-	}
-	
-	@After
-	public void disconnectFromServer() {
+	protected void stopServer() throws IOException {
 		conn.disconnect();
+		server.stop(1);
 	}
 
 	protected int sendRequest(String... pathComponents) throws IOException {
@@ -73,19 +63,7 @@ public abstract class ApiMockTestBase {
         return output;
 	}	
 	
-	protected void loadMockData(String requestMethod,
-			String requestURIPath,
-			String responseBody,
-			String responseCode) throws IOException {	
-  	    Map<String, RequestResponseData> mockData = new HashMap<String, RequestResponseData>();
-  	    mockData.put(requestMethod + "|" + requestURIPath,
-		    buildMockData(requestMethod, requestURIPath, responseBody, responseCode));
-        YamlWriter yamlWriter = new YamlWriter(new FileWriter(MOCK_DATA_FILENAME));
-        yamlWriter.write(mockData);
-        yamlWriter.close();
-	}
-	
-	private RequestResponseData buildMockData(
+	protected RequestResponseData buildMockData(
 			String requestMethod, 
 			String requestURIPath,
 			String responseBody,

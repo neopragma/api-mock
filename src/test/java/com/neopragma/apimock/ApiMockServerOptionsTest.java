@@ -2,6 +2,7 @@ package com.neopragma.apimock;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import org.apache.commons.cli.ParseException;
@@ -99,11 +100,11 @@ public class ApiMockServerOptionsTest {
 		assertEquals(6500, server.port);
 	}
 
-	private void initServerWithNoOptions() throws ParseException {
+	private void initServerWithNoOptions() throws ParseException, IOException {
 		server.init(new String[] {});
 	}
 	
-	private void initServerWithOptions(String...options) throws ParseException {
+	private void initServerWithOptions(String...options) throws ParseException, IOException {
 		server.init(options);
 	}
 }

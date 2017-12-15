@@ -2,8 +2,6 @@ package com.neopragma.apimock;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;

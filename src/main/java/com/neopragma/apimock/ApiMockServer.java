@@ -1,7 +1,9 @@
 package com.neopragma.apimock;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -15,10 +17,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.esotericsoftware.yamlbeans.YamlReader;
 import com.sun.net.httpserver.HttpServer;
 
 @SuppressWarnings("restriction")
-public class ApiMockServer {	
+public class ApiMockServer {		
+	private static final String MOCK_DATA_FILENAME = "test.yml";
 	private static final Logger LOGGER = Logger.getLogger("ApiMockServer");
 	private HttpServer server;
 	private Options options;
@@ -26,6 +30,7 @@ public class ApiMockServer {
 	int port = 8000;
 	Level loglevel = Level.ALL;
 	boolean runServer = true;
+	Map<String, RequestResponseData> mockData;
 	
 	public void startServer(String[] args) throws IOException, ParseException {
 		init(args);
@@ -34,16 +39,23 @@ public class ApiMockServer {
 		}
 		logConfig();
 		server = HttpServer.create(new InetSocketAddress(port), 0);
-		   server.createContext("/", new ApiMockRestHandler());
+		   server.createContext("/", new ApiMockRestHandler(mockData));
 		   server.setExecutor(null); 
 		   server.start();		
 	}
 	
-	void init(String[] args) throws ParseException {
+	void init(String[] args) throws ParseException, IOException {
 		initOptions(args);
 		if (runServer) {
  		    initLogging();
+ 		    mockData = getMockData();
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Map<String, RequestResponseData> getMockData() throws IOException {
+		YamlReader yamlReader = new YamlReader(new FileReader(MOCK_DATA_FILENAME));
+		return (Map<String, RequestResponseData>) yamlReader.read();
 	}
 	
 	private void initOptions(String[] args) throws ParseException {
