@@ -1,7 +1,5 @@
 # API Mock
 
-NOTE: Server can't read a yaml file from the filesystem. Change the design so that ApiMockServer passes the RequestResponseData object to ApiRestMockHandler.
-
 This is a simple mocking facility for testing RESTful APIs. It performs a key-value lookup to find the data to return for RESTful invocations over HTTP(S). The "key" comprises the request method concatenated with pipe concatenated with the request URI. For example:
 
 ```shell
