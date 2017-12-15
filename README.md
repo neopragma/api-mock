@@ -71,10 +71,7 @@ requestMethod: GET
 requestURIPath: /echo/text+to+echo
 responseCode: 200
 responseBody: { "result" : { "something": "123", "else": "ABC" }
-
-
-
-
+```
 
 ## Development
 
