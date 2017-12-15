@@ -15,14 +15,12 @@ public class ApiMockRestHandler implements HttpHandler {
 	private static final String MOCK_DATA_FILENAME = "test.yml";
 
 	@Override
-	public void handle(HttpExchange httpExchange) throws IOException {		
+	public void handle(HttpExchange httpExchange) throws IOException {
 		String requestMethod = httpExchange.getRequestMethod();
 		String requestURIPath = httpExchange.getRequestURI().getPath();
 		RequestResponseData data = getMockData(requestMethod, requestURIPath);
-	
 		String responseBody = data.responseBody;
 		int responseCode = Integer.parseInt(data.responseCode);
-
         httpExchange.sendResponseHeaders(responseCode, responseBody.length());
         OutputStream os = httpExchange.getResponseBody();
         os.write(responseBody.getBytes());

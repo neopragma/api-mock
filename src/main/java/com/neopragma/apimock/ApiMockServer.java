@@ -22,12 +22,16 @@ public class ApiMockServer {
 	private static final Logger LOGGER = Logger.getLogger("ApiMockServer");
 	private HttpServer server;
 	private Options options;
-	private String dataFilename = "test.yml";
-	private int port = 8000;
-	private Level loglevel = Level.ALL;
+	String dataFilename = "test.yml";
+	int port = 8000;
+	Level loglevel = Level.ALL;
+	boolean runServer = true;
 	
 	public void startServer(String[] args) throws IOException, ParseException {
 		init(args);
+		if (runServer == false) {
+			return;
+		}
 		logConfig();
 		server = HttpServer.create(new InetSocketAddress(port), 0);
 		   server.createContext("/", new ApiMockRestHandler());
@@ -35,18 +39,25 @@ public class ApiMockServer {
 		   server.start();		
 	}
 	
-	private void init(String[] args) throws ParseException {
+	void init(String[] args) throws ParseException {
 		initOptions(args);
-		initLogging();
+		if (runServer) {
+ 		    initLogging();
+		}
 	}
 	
 	private void initOptions(String[] args) throws ParseException {
 		options = new Options();
+		options.addOption("h", "help", false, "Display usage help on stdout");
 		options.addOption(new Option("d", "data", true, "Filename of yaml file containing mock data"));
 		options.addOption(new Option("l", "loglevel", true, "Logger level"));
 		options.addOption(new Option("p", "port", true, "Port server will listen on"));
 		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = parser.parse( options, args);
+		if (cmd.hasOption("help")) {
+			outputUsageHelp();
+			runServer = false;
+	    }
 		if (cmd.hasOption("data")) {
 			dataFilename = cmd.getOptionValue("data");
 		}
@@ -75,6 +86,18 @@ public class ApiMockServer {
 		configSettings.append(System.getProperty("line.separator") + "\t");
 		configSettings.append("port: " + String.valueOf(port));
 		LOGGER.log(Level.CONFIG, configSettings.toString());
+	}
+	
+	private void outputUsageHelp() {
+		stdout("Usage: java -jar apimock.jar");
+		stdout("    -h|help - this usage help");
+		stdout("    -d|--data filename");
+		stdout("    -l|--loglevel SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST");
+		stdout("    -p|--port - server listens on this port");
+	}
+	
+	private void stdout(String message) {
+		System.out.println(message);
 	}
 	
 	public static void main(String[] args) throws ParseException, IOException {

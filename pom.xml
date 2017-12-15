@@ -5,6 +5,7 @@
   <artifactId>api-mock</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>API Mock</name>
+  <packaging>jar</packaging>
   <url>http://github.com/neopragma/api-mock</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,11 +41,39 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-   </plugins>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <finalName>apimock</finalName>
+              <archive>
+                <manifest>
+                  <mainClass>
+                    com.neopragma.apimock.ApiMockServer
+                  </mainClass>
+                </manifest>
+              </archive>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <appendAssemblyId>false</appendAssemblyId>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
   </build>
   <organization>
-  	<name>NeoPragma LLC</name>
-  	<url>http://neopragma.com</url>
+    <name>NeoPragma LLC</name>
+    <url>http://neopragma.com</url>
   </organization>
   <scm>
   	<url>https://github.com/neopragma/api-mock</url>

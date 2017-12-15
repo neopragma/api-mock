@@ -7,7 +7,7 @@ import org.junit.Test;
 public class ApiMockTest extends ApiMockTestBase {
 	
 	@Test
-	public void it_connects_to_the_server() throws IOException {
+	public void can_connect_to_the_server() throws IOException {
 		loadMockData("GET", "/", "", "200");
 		assertEquals(200, sendRequest(EMPTY_STRING));
 	}
