@@ -73,6 +73,9 @@ responseCode: 200
 responseBody: { "result" : { "something": "123", "else": "ABC" }
 ```
 
+when a client invokes ```GET http://localhost:8000/echo/text+to+echo``` the server will return response code 200 and response body of ```{ "result" : { "something": "123", "else": "ABC" }```.
+
+
 ## Development
 
 ### General requirements
