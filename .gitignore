@@ -1,3 +1,4 @@
 .class
 target
 DS_Store*
+*.pid
