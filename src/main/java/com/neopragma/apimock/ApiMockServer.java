@@ -3,6 +3,7 @@ package com.neopragma.apimock;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -55,7 +56,8 @@ public class ApiMockServer {
 	@SuppressWarnings("unchecked")
 	private Map<String, RequestResponseData> getMockData() throws IOException {
 		YamlReader yamlReader = new YamlReader(new FileReader(MOCK_DATA_FILENAME));
-		return (Map<String, RequestResponseData>) yamlReader.read();
+		Map<String, RequestResponseData> mockData = (Map<String, RequestResponseData>) yamlReader.read();
+		return mockData == null ? new HashMap<String, RequestResponseData>() : mockData;
 	}
 	
 	private void initOptions(String[] args) throws ParseException {
