@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.neopragma</groupId>
   <artifactId>api-mock</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>API Mock</name>
   <packaging>jar</packaging>
   <url>http://github.com/neopragma/api-mock</url>
