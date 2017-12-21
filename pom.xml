@@ -11,6 +11,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
+    <project.distribution.directory>${project.basedir}/dist</project.distribution.directory>
+    <project.resources.directory>${project.basedir}/resources</project.resources.directory>
+    <project.executable.jar.name>apimock.jar</project.executable.jar.name>
   </properties>
   <dependencies>
     <dependency>
@@ -65,6 +68,32 @@
               </descriptorRefs>
               <appendAssemblyId>false</appendAssemblyId>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <id>prepare-distribution</id>
+            <phase>package</phase>
+            <configuration>
+              <target unless="skip.dist">
+                <echo message="To skip use mvn -Dskip.dist=true"/>
+                <copy file="${project.build.directory}/${project.executable.jar.name}" tofile="${project.distribution.directory}/${project.executable.jar.name}" />
+                <copy todir="${project.distribution.directory}">
+                  <fileset dir="${project.resources.directory}">
+                    <include name="*"/>
+                  </fileset>
+                </copy>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
