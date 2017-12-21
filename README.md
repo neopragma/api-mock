@@ -13,6 +13,10 @@ results in a key of:
 GET|/help/me/rhonda
 ```
 
+## Want to use it, don't want to build it 
+
+Download the contents of the ```dist``` directory.
+
 ## Specifying mock data values
 
 The mock data values are specified in a yaml file formatted as illustrated in the following example:
@@ -78,11 +82,11 @@ when a client invokes ```GET http://localhost:8000/echo/text+to+echo``` the serv
 
 ## Development
 
-### General requirements
+#### General requirements
 
 Please provide appropriate microtest cases for any new behaviors you implement. 
 
-### Building the executable jar
+#### Building the executable jar
 
 The assembly configuration is declared inside an execution element (by intent). Therefore, when building the executable jar, use:
 
@@ -95,6 +99,18 @@ instead of
 ```shell
 mvn assembly:single
 ```
+
+#### Warning messages
+
+The classifier is omitted from the artifact final name to simplify usage of the executable jar. Due to the way Maven handles naming, the messages
+
+```shell  
+[WARNING] Configuration options: 'appendAssemblyId' is set to false, and 'classifier' is missing.  
+[WARNING] Replacing pre-existing project main-artifact file: ...
+```
+
+are emitted during the build. As workarounds would not provide any particular value, we have decided to live with the warning message. Warnings can turn into real problems at some point, so we are documenting this decision. See [this explanation](https://issues.apache.org/jira/browse/MASSEMBLY-824) for more information about the naming conflict.
+
 
 
 

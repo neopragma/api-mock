@@ -1,0 +1,41 @@
+#!/bin/bash
+# Start and stop the apimock server
+PORT=8000
+
+if [ "$1" = "stop" ]
+then
+    echo "Stopping apimock server"
+    kill -9 $(head -n 1 apimock.pid)
+    rm apimock.pid
+else
+  echo "Starting apimock server on port $PORT"
+  java -jar apimock.jar $@ &
+  if [ "$1" = "-h" ] | [ "$1" = "--help" ]
+  then
+    echo "    Use 'apimock stop' to stop the server"
+  else
+  
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+      Linux*)     machine=Linux;;
+      Darwin*)    machine=Mac;;
+      CYGWIN*)    machine=Cygwin;;
+      MINGW*)     machine=MinGw;;
+      *)          machine="UNKNOWN:${unameOut}"
+    esac
+    echo "Machine is: ${machine}"
+  
+  
+  
+    sleep 2
+    
+    case "${machine}" in 
+      Linux)    netstat -tulpn | grep ":$PORT" | awk -F"LISTEN" '{split($2,a,"/");print a[1]}' | sed -e 's/^[ \t]*//' > apimock.pid ;;  
+      Mac)      lsof -n -i:$PORT | grep LISTEN | awk '{split($2,a,"/");print a[1]}' > apimock.pid ;;
+      *)        echo "${machine} not supported; stop the server manually" ;;
+    esac
+    
+#    lsof -n -i:$PORT | grep LISTEN | awk '{split($2,a,"/");print a[1]}' > apimock.pid
+#    netstat -tulpn | grep ":$PORT" | awk -F"LISTEN" '{split($2,a,"/");print a[1]}' | sed -e 's/^[ \t]*//' > apimock.pid
+  fi
+fi
